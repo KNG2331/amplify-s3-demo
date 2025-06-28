@@ -1,21 +1,23 @@
 "use client";
 
-import "@aws-amplify/ui-react/styles.css";
-import "@aws-amplify/ui-react-storage/storage-browser-styles.css";
-import outputs from "@/amplify_outputs.json";
 import { Authenticator, Button } from "@aws-amplify/ui-react";
-import { StorageBrowser } from "@aws-amplify/ui-react-storage";
+import {
+  createAmplifyAuthAdapter,
+  createStorageBrowser,
+} from "@aws-amplify/ui-react-storage/browser";
+import "@aws-amplify/ui-react-storage/styles.css";
 import { Amplify } from "aws-amplify";
+import outputs from "@/amplify/outputs.json";
 
 Amplify.configure({
-  outputs,
+  ...outputs,
   storage: {
     aws_region: "ap-northeast-1",
-    bucket_name: "kokui-test-sb-s3",
+    bucket_name: "ali-blog-sb-s3",
     buckets: [
       {
-        name: "kokui-test-sb-s3",
-        bucket_name: "kokui-test-sb-s3",
+        name: "ali-blog-sb-s3",
+        bucket_name: "ali-blog-sb-s3",
         aws_region: "ap-northeast-1",
         paths: {
           "admin/*": {
@@ -31,9 +33,13 @@ Amplify.configure({
   },
 });
 
-export default function App() {
+const { StorageBrowser } = createStorageBrowser({
+  config: createAmplifyAuthAdapter(),
+});
+
+export default function Home() {
   return (
-    <Authenticator hideSignUp={true}>
+    <Authenticator className="h-screen">
       {({ signOut }) => (
         <>
           <Button onClick={signOut}>Sign Out</Button>
